@@ -1,0 +1,7 @@
+@import 'tailwindcss';
+
+@layer base {
+    .hoverEffect {
+        @apply transition-all ease-in-out duration-300 cursor-pointer;
+    }
+}
