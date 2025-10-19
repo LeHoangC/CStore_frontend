@@ -7,6 +7,7 @@ import { Button, Rating } from '@mui/material'
 import { FormatPrice, FormatPriceVariant } from '../../utils/use-price'
 import { useAddToCartMutation } from '../../data/cart'
 import { ShoppingCart, Heart } from 'lucide-react'
+import ReviewProduct from '../../components/product/Review'
 
 const DetailsProduct = () => {
     const { productSlug } = useParams()
@@ -24,14 +25,14 @@ const DetailsProduct = () => {
         variants,
         description,
         stock,
+        reviews = [], // Giả định API trả về mảng reviews
     } = product
 
     const [quantity, setQuantity] = useState(1)
     const [selectedOptions, setSelectedOptions] = useState({})
-    const [activeImage, setActiveImage] = useState(null) // Khởi tạo null để kiểm soát lần đầu
-    const [isUserSelectedImage, setIsUserSelectedImage] = useState(false) // Flag để kiểm tra người dùng chọn ảnh
+    const [activeImage, setActiveImage] = useState(null)
+    const [isUserSelectedImage, setIsUserSelectedImage] = useState(false)
 
-    // Tìm variant phù hợp dựa trên selectedOptions
     const findMatchingVariant = useCallback(() => {
         return variants?.find((variant) =>
             variant.combination.every((item) => selectedOptions[item.option] === item.value)
@@ -40,17 +41,13 @@ const DetailsProduct = () => {
 
     const selectedVariant = useMemo(() => findMatchingVariant(), [findMatchingVariant])
 
-    // Cập nhật payloadItem dựa trên quantity và selectedVariant
     const payloadItem = useMemo(
         () => ({ quantity, productId: _id, variantId: selectedVariant?._id }),
         [quantity, _id, selectedVariant]
     )
 
-    // Xử lý activeImage khi dữ liệu tải lần đầu hoặc variant thay đổi
     useEffect(() => {
         if (isLoading) return
-
-        // Chỉ cập nhật nếu người dùng chưa chọn ảnh thủ công
         if (!isUserSelectedImage) {
             const newImage = selectedVariant?.images?.[0] || mainImage
             if (newImage?.url && activeImage?.url !== newImage.url) {
@@ -59,17 +56,16 @@ const DetailsProduct = () => {
         }
     }, [isLoading, mainImage, selectedVariant, isUserSelectedImage, activeImage])
 
-    // Hàm xử lý khi người dùng chọn ảnh từ ImageView
     const handleImageSelect = (image) => {
         setActiveImage(image)
-        setIsUserSelectedImage(true) // Đánh dấu rằng người dùng đã chọn ảnh
+        setIsUserSelectedImage(true)
     }
 
     const { mutate: handleAddToCart } = useAddToCartMutation()
 
     const handleSelectOption = (optionName, value) => {
         setSelectedOptions((prev) => ({ ...prev, [optionName]: value }))
-        setIsUserSelectedImage(false) // Reset flag khi chọn variant mới
+        setIsUserSelectedImage(false)
     }
 
     const handleDecrease = () => {
@@ -98,22 +94,13 @@ const DetailsProduct = () => {
     return (
         <Container className="">
             <div className="py-10 flex flex-col md:flex-row gap-10">
-                <ImageView
-                    images={images}
-                    activeImage={activeImage}
-                    setActiveImage={handleImageSelect} // Sử dụng hàm mới
-                />
+                <ImageView images={images} activeImage={activeImage} setActiveImage={handleImageSelect} />
                 <div className="w-full md:w-1/2 flex flex-col gap-5">
                     <div className="flex flex-col gap-4">
                         <h2 className="text-2xl md:text-3xl font-bold mb-2">{name}</h2>
                         <p className="flex items-center">
                             {ratings && (
-                                <Rating
-                                    name="half-rating-read"
-                                    defaultValue={ratings.average}
-                                    precision={0.5}
-                                    readOnly
-                                />
+                                <Rating name="half-rating-read" value={ratings.average} precision={0.5} readOnly />
                             )}
                             <span className="ml-2">({ratings.count})</span>
                         </p>
@@ -191,6 +178,7 @@ const DetailsProduct = () => {
                     </div>
                 </div>
             </div>
+            <ReviewProduct reviews={reviews} />
         </Container>
     )
 }

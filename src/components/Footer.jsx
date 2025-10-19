@@ -109,11 +109,6 @@ const Footer = () => {
                                 alt="MasterCard"
                                 className="h-6"
                             />
-                            <img
-                                src="https://upload.wikimedia.org/wikipedia/commons/8/89/Zahlungsmittel_MoMo_Logo.png"
-                                alt="MoMo"
-                                className="h-6"
-                            />
                         </div>
                     </div>
                 </div>

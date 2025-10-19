@@ -8,6 +8,7 @@ import { useAuthStore } from "../store/authStore"
 
 const authenApi = {
     login: (data) => axiosInstance.post(API_ENDPOINT.LOGIN, data),
+    signup: (data) => axiosInstance.post(API_ENDPOINT.SIGNUP, data),
     logout: () => axiosInstance.post(API_ENDPOINT.LOGOUT),
 };
 
@@ -31,6 +32,22 @@ export const useLoginMutation = () => {
         }
     })
 }
+
+export const useRegisterMutation = () => {
+    const { login } = useAuthStore()
+    const navigate = useNavigate()
+    return useMutation({
+        mutationFn: authenApi.signup,
+        onSuccess: (data) => {
+            login(data.user, data.tokens)
+            navigate('/', { replace: true })
+        },
+        onError: (err) => {
+            toast.error(err.message)
+        }
+    })
+}
+
 
 export const useLogoutMutation = () => {
     const navigate = useNavigate()

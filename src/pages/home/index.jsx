@@ -4,8 +4,12 @@ import { useProducts } from '../../data/product'
 import Container from '../../components/Container'
 import CardProduct from '../../components/product/CardProduct'
 import BannerSlider from '../../components/BannerSlider'
+import { useState } from 'react'
+import Pagination from '../../components/ui/pagination'
 
 const HomePage = () => {
+    const [page, setPage] = useState(1)
+
     const [searchParams] = useSearchParams()
     const allParams = Object.fromEntries([...searchParams])
     const { data: { data: products = [] } = {} } = useProducts({ ...allParams })
@@ -21,6 +25,19 @@ const HomePage = () => {
                         <CardProduct key={product._id} product={product} />
                     ))}
                 </div>
+                {/* <div className="mt-8 flex justify-end">
+                    <Pagination
+                        total={20}
+                        color="secondary"
+                        defaultCurrent={page}
+                        defaultValue={1}
+                        prevIconClassName="text-black"
+                        nextIconClassName="text-black"
+                        onChange={(page) => setPage(page)}
+                        pageSize={5}
+                        rounded="full"
+                    />
+                </div> */}
             </Container>
         </div>
     )

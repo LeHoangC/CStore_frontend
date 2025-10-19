@@ -2,7 +2,6 @@ import { Route, Routes } from 'react-router-dom'
 import Header from './components/header'
 import HomePage from './pages/home'
 import DetailsProduct from './pages/product/DetailsProduct'
-import Login from './pages/Login'
 import { ToastContainer } from 'react-toastify'
 import { useEffect } from 'react'
 import { useCartStore } from './store/cartStore'
@@ -12,6 +11,8 @@ import CheckoutPage from './pages/checkout'
 import OrdersPage from './pages/orders'
 import OrderDetailPage from './pages/orders/OrderDetails'
 import Footer from './components/Footer'
+import Login from './pages/auth/Login'
+import Register from './pages/auth/Register'
 
 function App() {
     const { setCart } = useCartStore((state) => state)
@@ -37,6 +38,7 @@ function App() {
                     <Route path="/orders" element={<OrdersPage />} />
                     <Route path="/order/:orderId" element={<OrderDetailPage />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
                 </Routes>
             </main>
 

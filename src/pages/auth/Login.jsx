@@ -1,13 +1,17 @@
-// src/components/LoginForm.jsx
 import { useForm } from 'react-hook-form'
-import { useLoginMutation } from '../data/authentication'
+import { useLoginMutation } from '../../data/authentication'
 
 function Login() {
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm()
+    } = useForm({
+        defaultValues: {
+            email: 'cuong@gmail.com',
+            password: 'cuong1',
+        },
+    })
 
     const { mutate: handleLogin, isPending } = useLoginMutation()
 
@@ -127,7 +131,7 @@ function Login() {
                 {/* Register Link */}
                 <p className="mt-6 text-center text-sm text-gray-600">
                     Chưa có tài khoản?{' '}
-                    <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                    <a href="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
                         Đăng ký ngay
                     </a>
                 </p>
