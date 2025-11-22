@@ -1,5 +1,5 @@
 import Container from '../../components/Container'
-import { useOrders } from '../../data/order'
+import { useCancelOrderMutation, useOrders } from '../../data/order'
 import { FormatPrice } from '../../utils/use-price'
 import { Link } from 'react-router-dom'
 import { statusOrder } from '../../constants/orderStatus'
@@ -7,6 +7,7 @@ import moment from 'moment'
 moment.locale('vi')
 
 const OrderItem = ({ order }) => {
+    const { mutate: cancelOrder } = useCancelOrderMutation()
     return (
         <div className="flex flex-wrap items-center gap-y-4 py-6">
             <dl className="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
@@ -43,6 +44,7 @@ const OrderItem = ({ order }) => {
             <div className="w-full grid sm:grid-cols-2 lg:flex lg:w-64 lg:items-center lg:justify-end gap-4">
                 {order?.order_status === 'pending' && (
                     <button
+                        onClick={() => cancelOrder({ orderId: order?.order_trackingNumber })}
                         type="button"
                         className="w-full rounded-lg border border-red-700 px-3 py-2 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900 lg:w-auto"
                     >

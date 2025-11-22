@@ -77,9 +77,10 @@ const DetailsProduct = () => {
     }
 
     const handleInputChange = (e) => {
-        const value = e.target.value
+        const value = parseInt(e.target.value) || 1
+        const currentStock = hasVariants ? selectedVariant?.stock : stock
         if (value === '' || (/^\d+$/.test(value) && parseInt(value) >= 1)) {
-            setQuantity(value === '' ? '' : parseInt(value))
+            setQuantity(Math.min(value, currentStock))
         }
     }
 
@@ -153,7 +154,10 @@ const DetailsProduct = () => {
                             />
                             <button
                                 onClick={handleIncrease}
-                                disabled={hasVariants && !selectedVariant}
+                                disabled={
+                                    (hasVariants && !selectedVariant) ||
+                                    quantity >= (hasVariants ? selectedVariant?.stock : stock)
+                                }
                                 className="px-3 py-1 text-gray-600 hover:bg-gray-100 focus:outline-none cursor-pointer"
                             >
                                 +

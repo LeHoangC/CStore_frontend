@@ -9,6 +9,7 @@ const ordersApi = {
     getAllOrders: () => axiosInstance.get(`${API_ENDPOINT.ORDERS}/orderByUser`),
     getOrder: (orderId) => axiosInstance.get(`${API_ENDPOINT.ORDERS}/orderByUser/${orderId}`),
     createOrder: (payload) => axiosInstance.post(API_ENDPOINT.CREATE_ORDER, payload),
+    cancelOrder: (payload) => axiosInstance.patch(`${API_ENDPOINT.ORDERS}/cancel`, payload),
 };
 
 export const useOrders = () => {
@@ -29,10 +30,26 @@ export const useCreateOrderMutation = () => {
     const navigate = useNavigate()
     return useMutation({
         mutationFn: ordersApi.createOrder,
-        onSuccess: () => {
+        onSuccess: (data) => {
+            if (data.code == '00') {
+                window.open(data.data.checkoutUrl, '_blank')
+            }
             toast.success('Đặt hàng thành công')
             localStorage.removeItem('itemCheckout')
             navigate('/orders', { replace: true })
+            invalidateQueries(API_ENDPOINT.ORDERS)
+        },
+        onError: err => {
+            toast.error(err.message)
+        }
+    })
+}
+
+export const useCancelOrderMutation = () => {
+    return useMutation({
+        mutationFn: ordersApi.cancelOrder,
+        onSuccess: (data) => {
+            toast.success('Hủy đơn hàng thành công')
             invalidateQueries(API_ENDPOINT.ORDERS)
         },
         onError: err => {

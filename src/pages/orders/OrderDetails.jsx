@@ -55,7 +55,7 @@ const OrderDetails = () => {
                             Đơn hàng của bạn đã hoàn tất và sẽ sớm được giao đến bạn.
                         </p>
                     )}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-8 py-6 border-y border-gray-100 mb-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-8 py-6 border-y border-gray-100 mb-6">
                         <div className="box group">
                             <p className="font-normal text-base leading-7 text-gray-500 mb-3 transition-all duration-500 group-hover:text-gray-700">
                                 Đơn hàng
@@ -78,6 +78,14 @@ const OrderDetails = () => {
                             </p>
                             <h6 className="font-semibold font-manrope text-xl leading-9 text-black">
                                 {order?.order_payment?.paymentMethod ?? ''}
+                            </h6>
+                        </div>
+                        <div className="box group">
+                            <p className="font-normal text-base leading-7 text-gray-500 mb-3 transition-all duration-500 group-hover:text-gray-700">
+                                Trạng thái thanh toán
+                            </p>
+                            <h6 className="font-semibold font-manrope text-xl leading-9 text-black">
+                                {order?.order_payment?.paymentStatus ?? ''}
                             </h6>
                         </div>
                         <div className="box group">

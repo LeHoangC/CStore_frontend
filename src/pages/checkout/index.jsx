@@ -21,7 +21,7 @@ const CheckoutPage = () => {
 
     const [productsChekout, setProductsCheckout] = useState([])
     const [checkoutOrder, setCheckoutOrder] = useState({})
-    const [paymentMethod, setPaymentMethod] = useState('Ngân hàng')
+    const [paymentMethod, setPaymentMethod] = useState('banking')
     const [address, setAdress] = useState('')
     const [payloadOrder, setPayloadOrder] = useState({
         cartId: cartItems?._id,
@@ -68,6 +68,8 @@ const CheckoutPage = () => {
     }, [checkoutReview, cartItems])
 
     const onSubmit = () => {
+        // console.log(payloadOrder)
+        // return
         createOrder(payloadOrder)
     }
 
@@ -189,12 +191,12 @@ const CheckoutPage = () => {
                             <FormControl component="fieldset">
                                 <RadioGroup value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
                                     <FormControlLabel
-                                        value="Ngân hàng"
+                                        value="banking"
                                         control={<Radio />}
                                         label="Thanh toán bằng thẻ ngân hàng"
                                     />
                                     <FormControlLabel
-                                        value="Thanh toán khi nhận hàng"
+                                        value="cod"
                                         control={<Radio />}
                                         label="Thanh toán khi nhận hàng"
                                     />

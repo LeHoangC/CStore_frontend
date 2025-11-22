@@ -8,6 +8,7 @@ import { Button } from '@mui/material'
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
+import { toast } from 'react-toastify'
 
 const CartPage = () => {
     const { cartItems: { cart_products = [] } = {} } = useCartStore()
@@ -30,7 +31,13 @@ const CartPage = () => {
         }
     }
 
-    const handleIncrease = (product) => {
+    const handleIncrease = (product, quantity) => {
+        const currentStock = product.hasVariants ? product.variants[0]?.stock : product.stock
+
+        if (quantity >= currentStock) {
+            return toast.error(`Số lượng tồn kho của sản phẩm ${product.name} chỉ còn lại ${currentStock}`)
+        }
+
         const payload = {
             productId: product._id,
             quantity: 1,
@@ -160,7 +167,7 @@ const CartPage = () => {
                                                 </button>
                                                 <span className="px-2">{quantity}</span>
                                                 <button
-                                                    onClick={() => handleIncrease(product)}
+                                                    onClick={() => handleIncrease(product, quantity)}
                                                     className="px-2 py-1 text-gray-600 hover:bg-gray-100 focus:outline-none cursor-pointer"
                                                 >
                                                     +
